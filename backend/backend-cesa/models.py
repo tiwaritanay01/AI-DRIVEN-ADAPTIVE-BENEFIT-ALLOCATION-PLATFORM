@@ -31,6 +31,11 @@ class Application(Base):
     fraud_score = Column(Integer, default=0) # 0-100 anomaly level
     fraud_flags = Column(Text) # Flags like "Duplicate Document", "IP Anomaly"
     
+    # District & Bonus Fields
+    district = Column(String) # Mumbai, Thane, Pune, Nagpur
+    readiness_bonus = Column(Integer, default=0)
+    socio_economic_bonus = Column(Integer, default=0)
+    
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Scheme(Base):

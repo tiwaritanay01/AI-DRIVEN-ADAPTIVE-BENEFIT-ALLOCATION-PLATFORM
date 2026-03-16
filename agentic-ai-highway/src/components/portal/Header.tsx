@@ -2,8 +2,16 @@ import { Search, Globe, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+declare global {
+  interface Window {
+    googleTranslateElementInit: () => void;
+    google: any;
+    __googleTranslateLoaded?: boolean;
+  }
+}
 
 const Header = () => {
   const location = useLocation();
@@ -16,6 +24,31 @@ const Header = () => {
     { label: "Track Application", path: "/track" },
     { label: "Admin Dashboard", path: "/admin" },
   ];
+
+  useEffect(() => {
+    const runInit = () => {
+      if (window.google && window.google.translate && !window.__googleTranslateLoaded) {
+        try {
+          if (document.getElementById("google_translate_element")) {
+            new window.google.translate.TranslateElement(
+              { pageLanguage: "en", includedLanguages: "en,hi,mr", autoDisplay: false },
+              "google_translate_element"
+            );
+            window.__googleTranslateLoaded = true;
+          }
+        } catch (e) {
+          console.error("Translate init failed", e);
+        }
+      }
+    };
+
+    window.googleTranslateElementInit = runInit;
+    
+    // Check if script already loaded but Header wasn't mount
+    if (window.google && window.google.translate) {
+      runInit();
+    }
+  }, []);
 
   return (
     <>
@@ -52,12 +85,11 @@ const Header = () => {
                 </div>
               </div>
 
-              {/* Language + mobile menu */}
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 hidden md:flex" aria-label="Change language">
-                  <Globe className="h-4 w-4 mr-1" aria-hidden="true" />
-                  English
-                </Button>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-2 py-1 bg-white/10 rounded-lg border border-white/20">
+                  <Globe className="h-3 w-3 text-gov-saffron" />
+                  <div id="google_translate_element" className="google-translate-container" />
+                </div>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -181,10 +213,9 @@ const Header = () => {
               </ul>
 
               <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
-                <Button variant="ghost" size="sm" className="text-white/60 hover:text-white w-full justify-start" aria-label="Change language">
-                  <Globe className="h-4 w-4 mr-2" aria-hidden="true" />
-                  English
-                </Button>
+                <div className="px-4 py-2">
+                  <div id="google_translate_element_mobile" />
+                </div>
               </div>
             </motion.nav>
           </>

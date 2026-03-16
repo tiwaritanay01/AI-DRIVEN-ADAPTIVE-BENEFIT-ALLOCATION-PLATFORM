@@ -58,6 +58,9 @@ class ApplicationResponse(BaseModel):
     fraud_score: Optional[int] = 0
     fraud_flags: Optional[str] = ""
     effective_score: Optional[float] = 0.0
+    district: Optional[str] = "Mumbai"
+    readiness_bonus: Optional[int] = 0
+    socio_economic_bonus: Optional[int] = 0
 
     model_config = {
         "from_attributes": True
@@ -70,19 +73,71 @@ def read_root():
 # Global Crisis Flag (In-memory for demo, should be DB in production)
 DISTRICT_CRISIS_MODE = False
 
+# New District-Specific Emergency Tracking
+DISTRICT_EMERGENCY_STATUS = {
+    "Mumbai": False,
+    "Thane": False,
+    "Pune": False,
+    "Nagpur": False
+}
+
 @app.post("/api/admin/toggle-crisis")
 def toggle_crisis(status: bool):
     global DISTRICT_CRISIS_MODE
     DISTRICT_CRISIS_MODE = status
+    # Update all districts if global is toggled? 
+    # Or keep them separate. User wants "Declare Emergency" to each district card.
     return {"status": "Global Crisis Mode " + ("Active" if status else "Inactive")}
+
+@app.post("/api/admin/toggle-district-emergency")
+def toggle_district_emergency(district: str, status: bool):
+    global DISTRICT_EMERGENCY_STATUS
+    if district in DISTRICT_EMERGENCY_STATUS:
+        DISTRICT_EMERGENCY_STATUS[district] = status
+        add_system_log(f"ALERT: Emergency mode {'activated' if status else 'deactivated'} for {district}.")
+        return {"status": f"Emergency mode adapted for {district}", "is_emergency": status}
+    return {"status": "Invalid district"}
+
+# Disaster Simulation State
+CURRENT_DISASTER = "None" # None, Flood, Economic Crash, Health Emergency
 
 @app.get("/api/admin/system-status")
 def get_system_status():
     return {
         "crisis_mode": DISTRICT_CRISIS_MODE,
+        "disaster_type": CURRENT_DISASTER,
         "nodes": ["North-01", "Central-Gov", "AI-Verification-09"],
-        "throughput": "1.2ms/ms"
+        "throughput": "1.2ms/ms",
+        "multiplier": 1.5 if DISTRICT_CRISIS_MODE else 1.0,
+        "district_emergencies": DISTRICT_EMERGENCY_STATUS
     }
+
+@app.post("/api/admin/simulate-disaster")
+def simulate_disaster(disaster_type: str):
+    global CURRENT_DISASTER, DISTRICT_CRISIS_MODE
+    CURRENT_DISASTER = disaster_type
+    if disaster_type != "None":
+        DISTRICT_CRISIS_MODE = True
+        add_system_log(f"ALERT: {disaster_type} simulation initiated. Global vulnerability multipliers active.")
+    else:
+        DISTRICT_CRISIS_MODE = False
+        add_system_log(f"Simulation cleared. System returning to steady state.")
+    return {"status": f"Simulating {disaster_type}", "crisis_mode": DISTRICT_CRISIS_MODE}
+
+@app.get("/api/admin/briefing")
+def get_executive_briefing(db: Session = Depends(get_db)):
+    # Simple logic for briefing - in a real app, this would use Gemini to summarize logs
+    total_apps = db.query(models.Application).count()
+    high_vuln = db.query(models.Application).filter(models.Application.vulnerability_score > 70).count()
+    fraud_flags = db.query(models.Application).filter(models.Application.fraud_score > 50).count()
+    
+    summary = f"EXECUTIVE SUMMARY: {CURRENT_DISASTER.upper() if CURRENT_DISASTER != 'None' else 'STABLE'} DISTRICT STATUS. " \
+              f"We have processed {total_apps} applications this cycle. " \
+              f"AI agents detected {high_vuln} high-vulnerability profiles requiring immediate attention. " \
+              f"Fraud Guardian intercepted {fraud_flags} security anomalies. " \
+              f"Current allocation efficiency: 98.4%. Recommended Action: Maintain Multiplier for priority resolution."
+              
+    return {"summary": summary}
 
 # SYSTEM LOGS (In-memory for demo)
 SYSTEM_LOGS = []
@@ -153,10 +208,13 @@ def tier2_llm_check(ocr_text: str, user_name: str, expected_doc_type: str):
         2. Check if the "User's Name" (or a significant part of it) appears in the document.
         3. Determine if the document looks like an official government ID, certificate, or legal document.
         
-        Output ONLY valid JSON (no markdown formatting, no backticks) with these exactly three keys:
-        - "status": "Verified" if it matches the document type and name, or "Flagged" if suspicious, non-matching, or missing critical info.
-        - "reason": A short 1-sentence explanation of your finding (e.g., "Confirmed as Aadhaar card for John Doe.")
-        - "priority": An integer. 2 for standard verified docs, 4 for flagged/suspect docs, 1 for emergency/security related.
+        Output ONLY valid JSON (no markdown formatting, no backticks) with these keys:
+        - "status": "Verified" or "Flagged"
+        - "reason": A short explanation
+        - "priority": Integer (1-4)
+        - "income": Annual income as a number (e.g., 120000) or null
+        - "land_hectares": Land ownership in hectares as a number (e.g., 1.5) or null
+        - "health_status": "Critical", "Chronic", "Stable", or "Unknown"
         """
         response = model.generate_content(prompt)
         text_response = response.text.strip()
@@ -168,19 +226,25 @@ def tier2_llm_check(ocr_text: str, user_name: str, expected_doc_type: str):
             text_response = text_response[3:-3]
             
         data = json.loads(text_response)
-        return data.get("status", "Flagged"), data.get("reason", "Parsed LLM decision."), int(data.get("priority", 4))
+        return (
+            data.get("status", "Flagged"), 
+            data.get("reason", "Parsed LLM decision."), 
+            int(data.get("priority", 4)),
+            data.get("income"),
+            data.get("land_hectares"),
+            data.get("health_status")
+        )
         
     except Exception as e:
         print(f"LLM Error: {e}")
         # Default safety fallback if API fails
-        name_verified = user_name.lower().split()[0] in ocr_text.lower() if user_name else False
         if name_verified:
-            return "Verified", f"Local Fallback: name '{user_name}' exists in document.", 2
+            return "Verified", f"Local Fallback: name '{user_name}' exists in document.", 2, None, None, "Unknown"
         else:
-            return "Flagged", "Local Fallback: could not find matching name.", 4
+            return "Flagged", "Local Fallback: could not find matching name.", 4, None, None, "Unknown"
     
 # CORE PS REQUIREMENT: VULNERABILITY & FRAUD ENGINE
-def calculate_vulnerability_and_fraud(ocr_text: str, name: str, db: Session):
+def calculate_vulnerability_and_fraud(ocr_text: str, name: str, db: Session, income=None, land=None, health=None):
     """
     Analyzes OCR for economic triggers and cross-checks for anomalies.
     """
@@ -221,35 +285,32 @@ def calculate_vulnerability_and_fraud(ocr_text: str, name: str, db: Session):
         fraud_score += 30
         fraud_flags.append("Incomplete Data: Minimum OCR threshold not met")
 
-    return min(v_score, 100), ", ".join(v_reasons), fraud_score, ", ".join(fraud_flags)
-
-def match_schemes(v_score: int, ocr_text: str):
-    """
-    Maps citizen profile to available schemes with justification and confidence.
-    """
-    ocr_lower = ocr_text.lower()
+    # Scheme Matching Logic
     matched = []
+    # PM-Kisan: (Land < 2 hectares)
+    if land is not None and land < 2:
+        matched.append("PM-Kisan")
+    elif "farmer" in ocr_lower and "2 hectare" not in ocr_lower and "land" in ocr_lower:
+        matched.append("PM-Kisan")
     
-    # Mock Scheme Library Logic
-    schemes = [
-        {"title": "India Benefit Gold", "threshold": 50, "keywords": ["bpl", "income"], "justification": "Detected Below Poverty Line (BPL) status in verified document."},
-        {"title": "Kisan Credit Shield", "threshold": 30, "keywords": ["farmer", "agricultural"], "justification": "Recognized marginal farming participation through occupational records."},
-        {"title": "Health-Link Subsidy", "threshold": 40, "keywords": ["disability", "health", "medical"], "justification": "Detected medical or disability triggers requiring urgent subsidy support."},
-        {"title": "Universal Basic Aid", "threshold": 10, "keywords": [], "justification": "Qualifies for basic livelihood support program based on residency and vulnerability index."}
-    ]
-    
-    for s in schemes:
-        if v_score >= s["threshold"]:
-            if not s["keywords"] or any(k in ocr_lower for k in s["keywords"]):
-                # Simulate match confidence based on score
-                confidence = min(99, v_score + 15)
-                matched.append({
-                    "title": s["title"],
-                    "confidence": confidence,
-                    "justification": s.get("justification", "Qualified based on eligibility score.")
-                })
-                
-    return matched
+    # Ayushman Bharat: (Critical Health trigger detected)
+    if health == "Critical" or any(k in ocr_lower for k in ["critical condition", "emergency surgery", "renal failure", "cancer"]):
+        matched.append("Ayushman Bharat")
+        
+    # BPL Subsidy: (Annual Income < ₹1.5L)
+    if income is not None and income < 150000:
+        matched.append("BPL Subsidy")
+    elif "bpl" in ocr_lower or "income certificate" in ocr_lower:
+        matched.append("BPL Subsidy")
+
+    # Socio-Economic Bonus: (+15) If matched with 2 or more Government Schemes.
+    se_bonus = 0
+    if len(matched) >= 2:
+        se_bonus = 15
+    elif any(k in ocr_lower for k in ["low income", "disability", "disabled", "medical emergency", "health crisis"]):
+        se_bonus = 10 
+
+    return min(v_score, 100), ", ".join(v_reasons), fraud_score, ", ".join(fraud_flags), se_bonus, matched
 
 
 @app.post("/api/submit_application")
@@ -262,6 +323,7 @@ async def submit_application(
     department: str = Form(""),
     document_name: str = Form(""),
     document_desc: str = Form(""),
+    district: str = Form("Mumbai"),
     file: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db)):
 
@@ -278,6 +340,7 @@ async def submit_application(
     else:
         ocr_text = document_desc
 
+    income, land, health = None, None, "Unknown"
     # 🏃 STEP 2: TIER 1 (REGEX)
     is_v, reason, prio = tier1_regex_check(ocr_text)
     tier = "Tier 1: OCR (Tesseract)+Regex"
@@ -286,7 +349,7 @@ async def submit_application(
     # 🏃 STEP 3: TIER 2 (LLM FALLBACK - Gemini Verification)
     if not is_v:
         # Trigger Fallback Agent with Gemini verification
-        res, llm_reason, llm_prio = tier2_llm_check(ocr_text, name, document_name or category)
+        res, llm_reason, llm_prio, income, land, health = tier2_llm_check(ocr_text, name, document_name or category)
         is_v = res
         reason = llm_reason
         prio = llm_prio
@@ -308,10 +371,11 @@ async def submit_application(
         prio = 1 # Force high priority for security
     
     # Calculate Vulnerability and Fraud
-    v_score, v_reasons, f_score, f_flags = calculate_vulnerability_and_fraud(ocr_text, name, db)
+    v_score, v_reasons, f_score, f_flags, se_bonus, matched = calculate_vulnerability_and_fraud(ocr_text, name, db, income, land, health)
     
-    # Match Schemes
-    matched = match_schemes(v_score, ocr_text)
+    # readiness_bonus: (+20 points) for users whose registration_status is 'Complete' and all documents are verified.
+    is_ready = (is_v == True or is_v == "Verified") and f_score < 30
+    ready_bonus = 20 if is_ready else 0
     
     db_application = models.Application(
         tracking_id=tracking_id,
@@ -333,7 +397,10 @@ async def submit_application(
         vulnerability_reasons=v_reasons,
         matched_schemes=json.dumps(matched),
         fraud_score=f_score,
-        fraud_flags=f_flags
+        fraud_flags=f_flags,
+        district=district,
+        readiness_bonus=ready_bonus,
+        socio_economic_bonus=se_bonus
     )
     
     db.add(db_application)
@@ -359,38 +426,38 @@ async def submit_application(
 
 @app.get("/api/applications", response_model=List[ApplicationResponse])
 def get_applications(db: Session = Depends(get_db)):
-    # Crisis multiplier check
-    multiplier = 1.5 if DISTRICT_CRISIS_MODE else 1.0
     apps = db.query(models.Application).all()
     
-    # Calculate effective score and priority queue logic
+    # Calculate effective score based on formula:
+    # (Vulnerability Score * Crisis Multiplier) + Readiness Bonus + Socio-Economic Bonus
     for app in apps:
-        app.effective_score = app.vulnerability_score * multiplier
+        # Get district-specific multiplier
+        is_emergency = DISTRICT_EMERGENCY_STATUS.get(app.district, False)
+        # Apply 1.5x multiplier for emergencies, else global check
+        multiplier = 1.5 if (is_emergency or DISTRICT_CRISIS_MODE) else 1.0
+        
+        app.effective_score = (app.vulnerability_score * multiplier) + (app.readiness_bonus or 0) + (app.socio_economic_bonus or 0)
     
-    # Sort by effective score (High to Low), then by Fraud Score (Low to High - basically keep high fraud apps visible at top if scores match)
-    # The requirement says sort return data by (vulnerability_score * crisis_multiplier) DESC
+    # Sort by effective score (High to Low)
     sorted_apps = sorted(
         apps, 
-        key=lambda x: (x.effective_score, -x.fraud_score), 
+        key=lambda x: x.effective_score, 
         reverse=True
     )
     return sorted_apps
 
 @app.get("/api/applications/priority", response_model=List[ApplicationResponse])
 def get_priority_list(db: Session = Depends(get_db)):
-    # Fetch crisis mode from app state or DB
-    multiplier = 1.5 if DISTRICT_CRISIS_MODE else 1.0
-
     apps = db.query(models.Application).all()
     
-    # Calculate effective score for sorting without mutating DB
     for app in apps:
-        app.effective_score = app.vulnerability_score * multiplier
+        is_emergency = DISTRICT_EMERGENCY_STATUS.get(app.district, False)
+        multiplier = 1.5 if (is_emergency or DISTRICT_CRISIS_MODE) else 1.0
+        app.effective_score = (app.vulnerability_score * multiplier) + (app.readiness_bonus or 0) + (app.socio_economic_bonus or 0)
     
-    # Sort by effective score (High to Low), then by Fraud Score (Low to High)
     sorted_apps = sorted(
         apps, 
-        key=lambda x: (x.effective_score, -x.fraud_score), 
+        key=lambda x: x.effective_score, 
         reverse=True
     )
     return sorted_apps

@@ -50,6 +50,7 @@ const SubmitApplication = () => {
     name: "", email: "", phone: "", address: "",
     documentName: "", documentDesc: "",
     category: "", department: "",
+    district: "Mumbai",
   });
 
   const update = (key: string, val: string) =>
@@ -118,6 +119,7 @@ const SubmitApplication = () => {
         department: form.department,
         document_name: form.documentName,
         document_desc: form.documentDesc,
+        district: form.district,
         file: selectedFile,
       });
       setTrackingId(response.tracking_id);
@@ -296,6 +298,41 @@ const SubmitApplication = () => {
                           placeholder="Enter your address"
                           className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus-visible:ring-indigo-gov text-slate-900 dark:text-white mt-1.5"
                         />
+                      </div>
+                      <div>
+                        <Label className="text-slate-700 dark:text-slate-300 mb-2 block">
+                          Select Districts (Multi-Selection Enabled)
+                        </Label>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {["Mumbai", "Thane", "Pune", "Nagpur"].map((d) => {
+                            const isSelected = form.district.split(", ").includes(d);
+                            return (
+                              <Badge 
+                                key={d}
+                                variant={isSelected ? "default" : "outline"}
+                                className={`cursor-pointer px-3 py-1.5 text-[10px] font-black uppercase transition-all ${
+                                  isSelected 
+                                    ? "bg-indigo-600 text-white border-indigo-600 shadow-md scale-105" 
+                                    : "bg-white dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700 hover:border-indigo-400"
+                                }`}
+                                onClick={() => {
+                                  const currents = form.district ? form.district.split(", ") : [];
+                                  let next;
+                                  if (currents.includes(d)) {
+                                    next = currents.filter(c => c !== d).join(", ");
+                                  } else {
+                                    next = [...currents, d].join(", ");
+                                  }
+                                  update("district", next || "Mumbai");
+                                }}
+                              >
+                                {d}
+                                {isSelected && <CheckCircle className="ml-1.5 h-3 w-3" />}
+                              </Badge>
+                            );
+                          })}
+                        </div>
+                        <p className="text-[10px] text-slate-400 italic font-medium uppercase tracking-tighter">Tip: Select all districts that apply to your current residence or business impact area.</p>
                       </div>
                     </div>
                   )}
@@ -543,6 +580,12 @@ const SubmitApplication = () => {
                               Phone
                             </strong>
                             {form.phone || "—"}
+                          </p>
+                          <p>
+                            <strong className="text-slate-500 dark:text-slate-400 block text-[10px] uppercase tracking-wider mb-0.5">
+                              District
+                            </strong>
+                            {form.district || "—"}
                           </p>
                         </div>
                         <div className="grid grid-cols-2 gap-y-3">
