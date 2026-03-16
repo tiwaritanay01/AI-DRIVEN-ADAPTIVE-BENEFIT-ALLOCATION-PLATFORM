@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Administrative Analytics | Adaptive Benefit Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .heatmap-cell { transition: all 0.3s ease; }
+        .heatmap-cell:hover { transform: scale(1.05); filter: brightness(1.1); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary rounded-lg p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">analytics</span>
+</div>
+<div>
+<h1 class="font-bold text-lg leading-tight">Adaptive Benefit</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">District Administration</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Schemes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Households</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+<img alt="User Profile" class="size-10 rounded-full bg-slate-200" data-alt="Official portrait of a government administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_axtdRPJB1K_kE5P13ckG8ZMqYsiOgywt7WT6d9P5GEhuSYx_7dHaX_UHJAY1UWl3i558cKauBQZMG4P4bz0DQpK81a38I2aY5S5U1gMbqLUOHspPxFYcnhZRwWkgG-Fxl9b-Z_KMpUADnISeCBPTv-kZzB-1klluQr2ELfn2PSDoObtqGI4wwy4vxoAHXmfKB0YhgzoH3oGTWEMRclaRYyUq2Ecv4-FXYej7GkA31o-KeuoLFuNU19tbzeocnsymHo1moI63Ljg"/>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold truncate">Dr. Rajesh Kumar</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">District Magistrate</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-y-auto">
+<!-- Top Header -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4 flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search by household ID, block, or scheme..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- Title & High-Level Stats -->
+<section>
+<div class="mb-6">
+<h2 class="text-3xl font-black tracking-tight">Live Vulnerability Index</h2>
+<p class="text-slate-500 dark:text-slate-400">AI-driven real-time monitoring and benefit allocation dashboard.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-lg material-symbols-outlined">priority_high</span>
+<span class="text-xs font-bold text-red-600 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded">+12.4%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Households Flagged for Urgent Aid</p>
+<h3 class="text-3xl font-bold mt-1">1,284</h3>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="p-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-lg material-symbols-outlined">payments</span>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded">+5.2%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Disbursement (This Month)</p>
+<h3 class="text-3xl font-bold mt-1">₹4.2 Cr</h3>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg material-symbols-outlined">psychology</span>
+<span class="text-xs font-bold text-slate-500 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">Stable</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">AI Accuracy Rating</p>
+<h3 class="text-3xl font-bold mt-1">98.4%</h3>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Vulnerability Heatmap -->
+<section class="lg:col-span-2 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold">Vulnerability Heatmap</h3>
+<div class="flex gap-2">
+<button class="text-xs font-medium px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full">District View</button>
+<button class="text-xs font-medium px-3 py-1 text-slate-500">Block View</button>
+</div>
+</div>
+<div class="relative bg-slate-200 dark:bg-slate-800 rounded-2xl h-[400px] overflow-hidden group">
+<!-- Placeholder for Interactive Map -->
+<div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&amp;fit=crop&amp;q=80&amp;w=1200')] bg-cover bg-center opacity-40 grayscale" data-alt="Satellite map view of the district with shaded overlays" data-location="Aurangabad District" style=""></div>
+<!-- Heatmap Overlays (Simulated) -->
+<div class="absolute inset-0 p-8 grid grid-cols-6 grid-rows-4 gap-4">
+<div class="bg-red-500/40 rounded-lg border-2 border-red-500 heatmap-cell flex items-center justify-center"><span class="text-[10px] font-bold text-white bg-black/40 px-1">Zone A1</span></div>
+<div class="bg-orange-500/30 rounded-lg border-2 border-orange-500 heatmap-cell"></div>
+<div class="bg-yellow-500/20 rounded-lg border-2 border-yellow-500 heatmap-cell"></div>
+<div class="bg-emerald-500/10 rounded-lg border-2 border-emerald-500 heatmap-cell"></div>
+<div class="bg-emerald-500/10 rounded-lg border-2 border-emerald-500 heatmap-cell"></div>
+<div class="bg-orange-500/30 rounded-lg border-2 border-orange-500 heatmap-cell"></div>
+<div class="col-start-2 row-start-2 bg-red-600/50 rounded-lg border-2 border-red-600 heatmap-cell flex items-center justify-center"><span class="text-[10px] font-bold text-white bg-black/40 px-1">Critical</span></div>
+<div class="col-start-5 row-start-3 bg-red-500/40 rounded-lg border-2 border-red-500 heatmap-cell"></div>
+<div class="col-span-2 bg-yellow-400/20 border-2 border-yellow-400 rounded-lg heatmap-cell"></div>
+</div>
+<div class="absolute bottom-4 left-4 bg-white/90 dark:bg-slate-900/90 p-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xl backdrop-blur">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Index Legend</p>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-red-500 rounded-sm"></div><span class="text-xs">Severe</span></div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-orange-500 rounded-sm"></div><span class="text-xs">High</span></div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-yellow-500 rounded-sm"></div><span class="text-xs">Medium</span></div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-emerald-500 rounded-sm"></div><span class="text-xs">Low</span></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Real-time Alerts Feed -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold">Real-time Alerts</h3>
+<span class="text-xs text-primary font-bold animate-pulse">LIVE</span>
+</div>
+<div class="space-y-3">
+<div class="p-4 bg-white dark:bg-slate-900 rounded-xl border-l-4 border-red-500 shadow-sm">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold text-red-500 uppercase">Climate Trigger</span>
+<span class="text-slate-400">2m ago</span>
+</div>
+<p class="text-sm font-semibold">Flash flood alert in Block 04</p>
+<p class="text-xs text-slate-500 mt-1">AI flagging 45 marginal farming households for immediate credit buffer.</p>
+</div>
+<div class="p-4 bg-white dark:bg-slate-900 rounded-xl border-l-4 border-primary shadow-sm">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold text-primary uppercase">Economic Shift</span>
+<span class="text-slate-400">14m ago</span>
+</div>
+<p class="text-sm font-semibold">Wheat Price Spike (+18%)</p>
+<p class="text-xs text-slate-500 mt-1">Detected in Northern Sector. Auto-adjusting PDS allocations for 1,200 families.</p>
+</div>
+<div class="p-4 bg-white dark:bg-slate-900 rounded-xl border-l-4 border-blue-500 shadow-sm">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold text-blue-500 uppercase">Health Proxy</span>
+<span class="text-slate-400">1h ago</span>
+</div>
+<p class="text-sm font-semibold">Viral Outbreak Pattern</p>
+<p class="text-xs text-slate-500 mt-1">Tele-med usage spike in Zone A1. Prioritizing health insurance payouts.</p>
+</div>
+</div>
+<button class="w-full py-2 text-sm font-medium text-slate-500 hover:text-primary transition-colors">View All Incident History</button>
+</section>
+</div>
+<!-- Pending Allocations -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold">Pending Allocations (Official Approval Required)</h3>
+<div class="flex items-center gap-2">
+<button class="text-sm bg-primary text-white px-4 py-2 rounded-lg font-bold">Batch Approve (12)</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-sm uppercase font-bold">
+<tr>
+<th class="px-6 py-4">Household ID</th>
+<th class="px-6 py-4">Primary Member</th>
+<th class="px-6 py-4">Scheme</th>
+<th class="px-6 py-4">AI Rec. Benefit</th>
+<th class="px-6 py-4">Confidence</th>
+<th class="px-6 py-4">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-mono text-sm">#HH-482-901</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-slate-400 text-sm">person</span></div>
+<span class="text-sm font-medium">Suresh Varma</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded font-bold">Kisan Credit</span>
+</td>
+<td class="px-6 py-4 font-bold text-slate-900 dark:text-slate-100">₹15,000</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[96%]"></div>
+</div>
+<span class="text-xs font-bold text-emerald-500">96%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<button class="p-1.5 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg material-symbols-outlined">check_circle</button>
+<button class="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg material-symbols-outlined">cancel</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-mono text-sm">#HH-231-112</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-slate-400 text-sm">person</span></div>
+<span class="text-sm font-medium">Meera Devi</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-xs px-2 py-1 rounded font-bold">Widow Pension</span>
+</td>
+<td class="px-6 py-4 font-bold text-slate-900 dark:text-slate-100">₹2,500</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[99%]"></div>
+</div>
+<span class="text-xs font-bold text-emerald-500">99%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<button class="p-1.5 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg material-symbols-outlined">check_circle</button>
+<button class="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg material-symbols-outlined">cancel</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-mono text-sm">#HH-772-004</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-slate-400 text-sm">person</span></div>
+<span class="text-sm font-medium">Abdul Karim</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 text-xs px-2 py-1 rounded font-bold">Drought Relief</span>
+</td>
+<td class="px-6 py-4 font-bold text-slate-900 dark:text-slate-100">₹8,000</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-yellow-500 h-full w-[74%]"></div>
+</div>
+<span class="text-xs font-bold text-yellow-600">74%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<button class="p-1.5 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg material-symbols-outlined">check_circle</button>
+<button class="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg material-symbols-outlined">cancel</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-center">
+<button class="text-xs font-bold text-primary hover:underline">Show All 142 Pending Requests</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Citizen Dashboard - Adaptive Benefit Allocation Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                        "indigo-gov": "#1a237e",
+                        "indigo-accent": "#3949ab",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .bg-indigo-gov { background-color: #1a237e; }
+        .text-indigo-gov { color: #1a237e; }
+        .border-indigo-gov { border-color: #1a237e; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header Section -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-20 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-10 flex items-center justify-center bg-indigo-gov rounded-lg text-white">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+</div>
+<div class="flex flex-col">
+<h2 class="text-indigo-gov dark:text-indigo-accent text-lg font-bold leading-tight tracking-tight">India Benefit Portal</h2>
+<span class="text-[10px] uppercase tracking-widest font-semibold text-slate-500">Government of India</span>
+</div>
+</div>
+<div class="hidden md:flex flex-col min-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-10 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+<div class="text-slate-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 text-sm font-normal" placeholder="Search schemes, track application..." value=""/>
+</div>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-indigo-gov dark:text-indigo-accent text-sm font-semibold hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-indigo-gov transition-colors" href="#">My Applications</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-indigo-gov transition-colors" href="#">Schemes Explorer</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-indigo-gov transition-colors" href="#">Transparency Data</a>
+</nav>
+<div class="flex items-center gap-3 border-l border-slate-200 dark:border-slate-700 pl-6">
+<button class="relative p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Rajesh Kumar</p>
+<p class="text-[11px] text-slate-500 font-medium uppercase mt-1">Aadhaar Verified</p>
+</div>
+<div class="bg-indigo-gov rounded-full size-10 flex items-center justify-center text-white font-bold border-2 border-white shadow-sm" data-alt="User profile avatar circle">
+                            RK
+                        </div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto w-full px-6 lg:px-20 py-8">
+<!-- Welcome Header -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Citizen Dashboard</h1>
+<p class="text-slate-600 dark:text-slate-400 mt-1">Real-time adaptive benefit allocation powered by AI</p>
+</div>
+<div class="flex items-center gap-2 text-sm font-medium text-slate-500 bg-white dark:bg-slate-800 px-4 py-2 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
+<span class="size-2 bg-green-500 rounded-full"></span>
+                    System Live: Last updated 2 mins ago
+                </div>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Vulnerability & Schemes -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<!-- Live Vulnerability Index Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="relative size-32 flex items-center justify-center">
+<svg class="size-32 -rotate-90">
+<circle class="text-slate-100 dark:text-slate-800" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="116.6" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black text-indigo-gov dark:text-white">68</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Index Score</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">warning</span>
+<h3 class="text-lg font-bold">Vulnerability Alert: Moderate Risk</h3>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
+                                    Your vulnerability index has increased by <span class="text-primary font-bold">+12</span> points due to recent localized environmental and economic factors.
+                                </p>
+<div class="flex flex-wrap gap-2">
+<div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-orange-600 text-sm">flood</span>
+<span class="text-xs font-semibold text-orange-700 dark:text-orange-400">Local Flood Event (Aug 12)</span>
+</div>
+<div class="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-red-600 text-sm">trending_down</span>
+<span class="text-xs font-semibold text-red-700 dark:text-red-400">Income Drop Detected (July 20)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recommended Schemes Section -->
+<div>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo-gov">auto_awesome</span>
+                                AI-Matched Recommendations
+                            </h2>
+<button class="text-sm font-bold text-indigo-gov dark:text-indigo-accent hover:underline">View All Schemes</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Scheme Card 1 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-xl hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="size-12 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-gov dark:text-indigo-400">
+<span class="material-symbols-outlined text-3xl">agriculture</span>
+</div>
+<span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">98% Match</span>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-indigo-gov transition-colors">PM-Kisan Nidhi</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Direct income support for farmer families based on land-holding criteria.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-primary font-bold">₹6,000 / Year</span>
+<button class="bg-primary hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-bold transition-colors">Apply Now</button>
+</div>
+</div>
+<!-- Scheme Card 2 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-xl hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="size-12 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-3xl">home</span>
+</div>
+<span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">85% Match</span>
+</div>
+<h3 class="font-bold text-lg mb-1 group-hover:text-indigo-gov transition-colors">Housing Subsidy (PMAY)</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Financial assistance for construction of houses in rural areas.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-primary font-bold">₹1.2 Lakh Grant</span>
+<button class="bg-primary hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-bold transition-colors">Apply Now</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Application Status Tracker -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo-gov">track_changes</span>
+                            Ongoing Application Status
+                        </h2>
+<div class="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-100 dark:bg-slate-800 hidden md:block -translate-y-1/2 -z-10"></div>
+<!-- Step 1 -->
+<div class="flex md:flex-col items-center gap-4 md:gap-2 flex-1 text-center">
+<div class="size-10 rounded-full bg-green-500 text-white flex items-center justify-center z-10">
+<span class="material-symbols-outlined">check</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase text-slate-400">Step 1</p>
+<p class="text-sm font-bold">Applied</p>
+<p class="text-[10px] text-slate-500">Aug 05, 2023</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex md:flex-col items-center gap-4 md:gap-2 flex-1 text-center">
+<div class="size-10 rounded-full bg-green-500 text-white flex items-center justify-center z-10">
+<span class="material-symbols-outlined">check</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase text-slate-400">Step 2</p>
+<p class="text-sm font-bold">Verified</p>
+<p class="text-[10px] text-slate-500">Aug 14, 2023</p>
+</div>
+</div>
+<!-- Step 3 (Current) -->
+<div class="flex md:flex-col items-center gap-4 md:gap-2 flex-1 text-center">
+<div class="size-10 rounded-full border-4 border-primary bg-white dark:bg-slate-900 flex items-center justify-center z-10">
+<div class="size-2 bg-primary rounded-full animate-pulse"></div>
+</div>
+<div>
+<p class="text-xs font-bold uppercase text-primary">In Progress</p>
+<p class="text-sm font-bold">Audit Checks</p>
+<p class="text-[10px] text-slate-500">Est. Aug 28</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flex md:flex-col items-center gap-4 md:gap-2 flex-1 text-center">
+<div class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center z-10">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase text-slate-400">Step 4</p>
+<p class="text-sm font-bold text-slate-400">Disbursement</p>
+<p class="text-[10px] text-slate-500">Scheduled</p>
+</div>
+</div>
+</div>
+<div class="mt-8 bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-indigo-gov mt-0.5">info</span>
+<p class="text-xs text-indigo-900 dark:text-indigo-300 leading-relaxed">
+<strong>Next Step:</strong> Your application for the 'Ujjwala 2.0' scheme is currently undergoing the final automated background verification. No action is required from your side.
+                            </p>
+</div>
+</div>
+</div>
+<!-- Right Column: Transparency & Sidebar -->
+<div class="flex flex-col gap-6">
+<!-- District Transparency Widget -->
+<div class="bg-indigo-gov text-white rounded-xl shadow-lg border border-indigo-950 overflow-hidden">
+<div class="p-6">
+<h2 class="text-lg font-bold mb-1">District Transparency</h2>
+<p class="text-indigo-200 text-xs mb-4">Real-time fund distribution in Varanasi District</p>
+<!-- Simple Map Placeholder -->
+<div class="w-full h-48 bg-indigo-950/50 rounded-lg mb-6 relative overflow-hidden flex items-center justify-center border border-indigo-800" data-location="Varanasi, India" style="">
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2)_1px,transparent_1px)] bg-[length:10px_10px]" data-alt="Abstract grid map pattern"></div>
+<span class="material-symbols-outlined text-6xl text-indigo-400/30">map</span>
+<div class="absolute bottom-4 left-4 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded text-[10px] border border-white/20">
+                                    Funds Disbursed: <span class="text-primary font-bold">₹42.8 Cr</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between text-xs">
+<span>Agricultural Aid</span>
+<span class="font-bold">72%</span>
+</div>
+<div class="w-full bg-indigo-950 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 72%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between text-xs">
+<span>Healthcare Credits</span>
+<span class="font-bold">48%</span>
+</div>
+<div class="w-full bg-indigo-950 rounded-full h-2">
+<div class="bg-blue-400 h-2 rounded-full" style="width: 48%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between text-xs">
+<span>Education Grants</span>
+<span class="font-bold">35%</span>
+</div>
+<div class="w-full bg-indigo-950 rounded-full h-2">
+<div class="bg-green-400 h-2 rounded-full" style="width: 35%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-indigo-950/50 px-6 py-4 flex justify-between items-center border-t border-indigo-900">
+<span class="text-[10px] font-bold uppercase tracking-wider text-indigo-300">Open Data Audit</span>
+<button class="text-[10px] font-bold bg-white text-indigo-gov px-3 py-1 rounded">View Report</button>
+</div>
+</div>
+<!-- Quick Support Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+<h3 class="font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo-gov">headset_mic</span>
+                            Need Assistance?
+                        </h3>
+<div class="space-y-3">
+<a class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700" href="#">
+<div class="size-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-indigo-gov dark:text-indigo-400">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold leading-none">AI Assistant</p>
+<p class="text-[10px] text-slate-500 mt-1">Instant answers to your queries</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700" href="#">
+<div class="size-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-indigo-gov dark:text-indigo-400">
+<span class="material-symbols-outlined text-sm">video_chat</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold leading-none">Video Helpdesk</p>
+<p class="text-[10px] text-slate-500 mt-1">Book a slot with an officer</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Document Checklist -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+<h3 class="font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo-gov">description</span>
+                            Your Documents
+                        </h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between text-xs">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+                                    Aadhaar Card
+                                </span>
+<span class="text-slate-400">Verified</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+                                    Ration Card
+                                </span>
+<span class="text-slate-400">Verified</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-orange-500 text-sm">pending</span>
+                                    Income Certificate
+                                </span>
+<span class="text-primary font-bold">Update Required</span>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border-2 border-indigo-gov text-indigo-gov dark:border-indigo-accent dark:text-indigo-accent rounded-lg text-sm font-bold hover:bg-indigo-gov hover:text-white dark:hover:bg-indigo-accent dark:hover:text-white transition-all">
+                            Manage Document Vault
+                        </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-10 px-6 lg:px-20">
+<div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
+<div class="max-w-xs">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-indigo-gov text-3xl">account_balance</span>
+<h3 class="text-lg font-bold">Digital India</h3>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed">
+                        The Adaptive Benefit Allocation Platform is a central initiative to ensure equitable distribution of welfare schemes using real-time socio-economic data.
+                    </p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-10">
+<div>
+<h4 class="font-bold text-sm mb-4 uppercase tracking-wider">Resources</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-indigo-gov" href="#">Scheme Guidelines</a></li>
+<li><a class="hover:text-indigo-gov" href="#">Data Privacy Policy</a></li>
+<li><a class="hover:text-indigo-gov" href="#">API Access</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-sm mb-4 uppercase tracking-wider">Governance</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-indigo-gov" href="#">District Reports</a></li>
+<li><a class="hover:text-indigo-gov" href="#">Audit Logs</a></li>
+<li><a class="hover:text-indigo-gov" href="#">State Mandates</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-sm mb-4 uppercase tracking-wider">Connect</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-indigo-gov" href="#">Contact Us</a></li>
+<li><a class="hover:text-indigo-gov" href="#">Feedback</a></li>
+<li><a class="hover:text-indigo-gov" href="#">Official App</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1440px] mx-auto mt-10 pt-6 border-t border-slate-100 dark:border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4">
+<p class="text-[10px] text-slate-400 font-medium">© 2023 National Informatics Centre. Contents owned and updated by Ministry of Electronics &amp; IT.</p>
+<div class="flex gap-4">
+<div class="h-8 w-24 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-[10px] font-bold text-slate-400">NIC India</div>
+<div class="h-8 w-24 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-[10px] font-bold text-slate-400">MyGov</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

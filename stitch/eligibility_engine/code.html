@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Adaptive Benefit Allocation Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark px-6 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">auto_awesome</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight text-slate-900 dark:text-slate-100">Adaptive Benefit Allocation</h2>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-semibold border-b-2 border-primary pb-0.5" href="#">Schemes</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Eligibility</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm placeholder:text-slate-500 w-48" placeholder="Search households..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 ml-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8c2jOffQPJKRszibr2LpH6Tok4qQxkK3MC-EPa5b0wXuP4Fuk6pqdU7k2pCq_4j4VclfunwgslFmCsVQmoAPPlBDbZ8kdf7kXf6qzyGpOhj898Wk5ioKEiom5fQ82_kzegf21y8xjs0qyOFl4Z5AKMBuPDwtsaZ7Y_O_r_jcvUHWza7ldAEKKVKGfGFq4cZSLUyJWAni48eDpDfA6fVyG2LbkTt3ad0zbnGHY_zRLRt_vm5xiCaz-PXWnnEM0cqsZ6x0tzLOz-M4"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Side Panel: Logic Panel -->
+<aside class="hidden lg:flex w-72 flex-col border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark p-6 overflow-y-auto">
+<div class="mb-8">
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">AI Matching Engine</h3>
+<div class="space-y-1">
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[22px]">psychology</span>
+<span class="text-sm font-semibold">Matching Logic</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[22px]">content_cut</span>
+<span class="text-sm font-medium">Trigger Analysis</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+<span class="text-sm font-medium">Confidence Score</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[22px]">history</span>
+<span class="text-sm font-medium">Audit Trail</span>
+</div>
+</div>
+</div>
+<div class="rounded-2xl bg-slate-100 dark:bg-slate-800/50 p-4 border border-slate-200 dark:border-slate-800">
+<h4 class="text-xs font-bold uppercase text-slate-400 dark:text-slate-500 mb-3">Currently Analyzing</h4>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded bg-primary/20 text-primary text-[10px] font-bold">ACTIVE</span>
+<span class="text-sm font-mono font-medium">HH-9821</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed mb-4">Real-time health record sync detected chronic respiratory condition requiring immediate subsidy update.</p>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-[10px] font-bold text-slate-400 uppercase">Match Accuracy</span>
+<span class="text-xs font-bold text-primary">98.2%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 98.2%"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-900/30">
+<!-- Page Header -->
+<div class="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Scheme Matching &amp; Eligibility Engine</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">AI-driven citizen matching based on real-time data triggers across 42 active schemes.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-xl shadow-lg shadow-primary/20 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+<span>Approve Batch</span>
+</button>
+</div>
+</div>
+<!-- Filters -->
+<div class="px-6 md:px-8 pb-6 flex flex-wrap gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        Scheme Type <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        District <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        Vulnerability Level <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-800 mx-2"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 text-xs font-semibold hover:text-primary transition-colors">
+                        Clear All Filters
+                    </button>
+</div>
+<!-- Main Data Table -->
+<div class="flex-1 px-6 md:px-8 pb-8 overflow-x-auto">
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Household ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Matched Scheme</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Match Confidence</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Data Triggers</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 whitespace-nowrap">
+<span class="font-mono text-sm font-medium text-slate-900 dark:text-slate-100">HH-9821</span>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-blue-500"></div>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Healthcare Subsidy B</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[80px] h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-green-500" style="width: 98%;"></div>
+</div>
+<span class="text-xs font-bold text-green-600 dark:text-green-400">98%</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Chronic health record</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Elderly head</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap text-right">
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all">View Profile</button>
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all">Override</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 whitespace-nowrap">
+<span class="font-mono text-sm font-medium text-slate-900 dark:text-slate-100">HH-4432</span>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Unemployment Relief</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[80px] h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-green-500" style="width: 85%;"></div>
+</div>
+<span class="text-xs font-bold text-green-600 dark:text-green-400">85%</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Termination notice detected</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap text-right">
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all">View Profile</button>
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all">Override</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors bg-primary/5">
+<td class="px-6 py-5 whitespace-nowrap border-l-4 border-primary">
+<span class="font-mono text-sm font-bold text-slate-900 dark:text-slate-100">HH-1029</span>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-amber-500"></div>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Special Education Grant</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[80px] h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 92%;"></div>
+</div>
+<span class="text-xs font-bold text-primary">92%</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-[10px] font-bold text-primary border border-primary/20">3 school-aged children</span>
+<span class="px-2 py-0.5 rounded bg-primary/10 text-[10px] font-bold text-primary border border-primary/20">Income bracket A</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap text-right">
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all">View Profile</button>
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all">Override</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 whitespace-nowrap">
+<span class="font-mono text-sm font-medium text-slate-900 dark:text-slate-100">HH-5567</span>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-purple-500"></div>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Disaster Housing Relief</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[80px] h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500" style="width: 78%;"></div>
+</div>
+<span class="text-xs font-bold text-amber-600 dark:text-amber-400">78%</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Geospatial: Flood zone match</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap text-right">
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all">View Profile</button>
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all">Override</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 whitespace-nowrap">
+<span class="font-mono text-sm font-medium text-slate-900 dark:text-slate-100">HH-2091</span>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-blue-500"></div>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Basic Food Grant</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-[80px] h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-green-500" style="width: 95%;"></div>
+</div>
+<span class="text-xs font-bold text-green-600 dark:text-green-400">95%</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Retail spending drop -40%</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Digital footprint low</span>
+</div>
+</td>
+<td class="px-6 py-5 whitespace-nowrap text-right">
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all">View Profile</button>
+<button class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all">Override</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<span class="text-xs text-slate-500 font-medium">Showing 1-5 of 128 matched households</span>
+<div class="flex gap-2">
+<button class="p-1 text-slate-400 hover:text-primary transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-1 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Detail Panel (Logic Breakdown) -->
+<aside class="hidden xl:flex w-96 flex-col border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-y-auto">
+<div class="p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold">Match Logic Analysis</h3>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-slate-600">close</span>
+</div>
+<div class="flex items-center gap-4 mb-8 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">home_work</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase text-slate-400 tracking-wider">Target Household</p>
+<h4 class="text-base font-bold">HH-1029</h4>
+</div>
+</div>
+<div class="space-y-6">
+<div>
+<h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">database</span>
+                                Primary Data Sources
+                            </h4>
+<div class="space-y-2">
+<div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30">
+<p class="text-[11px] font-bold text-slate-400 uppercase mb-1">Education Registry</p>
+<p class="text-xs font-medium">3 active enrollments (Primary: 2, Secondary: 1)</p>
+</div>
+<div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30">
+<p class="text-[11px] font-bold text-slate-400 uppercase mb-1">Tax Revenue Office</p>
+<p class="text-xs font-medium">Reported income: $18,400 (Bottom 15th percentile)</p>
+</div>
+</div>
+</div>
+<div>
+<h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">insights</span>
+                                Logic Weights
+                            </h4>
+<div class="space-y-4">
+<div class="space-y-1.5">
+<div class="flex justify-between text-[11px] font-semibold">
+<span>Dependency Ratio</span>
+<span>High (+45%)</span>
+</div>
+<div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between text-[11px] font-semibold">
+<span>Income Volatility</span>
+<span>Low (+12%)</span>
+</div>
+<div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 30%"></div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between text-[11px] font-semibold">
+<span>Asset Liquidity</span>
+<span>Minimal (+35%)</span>
+</div>
+<div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 70%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-slate-200 dark:border-slate-800">
+<h4 class="text-sm font-bold mb-2">Recommendation</h4>
+<p class="text-xs text-slate-500 leading-relaxed italic">"The household qualifies for Scheme E-98 (Special Ed) based on the intersection of multi-child dependency and persistent low-income bracket. Eligibility score is stable."</p>
+</div>
+</div>
+<div class="mt-8 flex flex-col gap-2">
+<button class="w-full py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold rounded-xl hover:bg-slate-200 transition-colors">Generate Reasoning PDF</button>
+<button class="w-full py-2.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-xl hover:bg-slate-50 transition-colors">Flag for Manual Audit</button>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>
