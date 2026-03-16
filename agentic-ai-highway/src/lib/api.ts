@@ -2,7 +2,7 @@
 // API client for the GovTech backend (FastAPI running on port 8001)
 // ---------------------------------------------------------------------------
 
-export const API_BASE = "http://localhost:8001";
+export const API_BASE = "http://127.0.0.1:8001";
 
 // ──────────────────────────────────────────────
 // Types mirroring the backend ApplicationResponse
@@ -33,6 +33,9 @@ export interface Application {
   fraud_score?: number;
   fraud_flags?: string;
   effective_score?: number;
+  district?: string;
+  readiness_bonus?: number;
+  socio_economic_bonus?: number;
 }
 
 export interface LogEntry {
@@ -42,8 +45,11 @@ export interface LogEntry {
 
 export interface SystemStatus {
   crisis_mode: boolean;
+  disaster_type: string;
   nodes: string[];
   throughput: string;
+  multiplier: number;
+  district_emergencies: Record<string, boolean>;
 }
 
 
@@ -56,6 +62,7 @@ export interface SubmitApplicationPayload {
   department: string;
   document_name: string;
   document_desc: string;
+  district: string;
   file?: File | null;
 }
 
@@ -98,6 +105,7 @@ export async function submitApplication(
   formData.append("department", payload.department);
   formData.append("document_name", payload.document_name);
   formData.append("document_desc", payload.document_desc);
+  formData.append("district", payload.district);
   if (payload.file) {
     formData.append("file", payload.file);
   }
@@ -211,3 +219,33 @@ export async function getSystemLogs(): Promise<LogEntry[]> {
   return res.json();
 }
 
+/**
+ * Simulate a disaster trigger.
+ */
+export async function simulateDisaster(disasterType: string): Promise<{ status: string }> {
+  const res = await fetch(`${API_BASE}/api/admin/simulate-disaster?disaster_type=${disasterType}`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to simulate disaster");
+  return res.json();
+}
+
+/**
+ * Get executive AI summary briefing.
+ */
+export async function getExecutiveBriefing(): Promise<{ summary: string }> {
+  const res = await fetch(`${API_BASE}/api/admin/briefing`);
+  if (!res.ok) throw new Error("Failed to fetch executive briefing");
+  return res.json();
+}
+
+/**
+ * Toggle emergency mode for a specific district.
+ */
+export async function toggleDistrictEmergency(district: string, status: boolean): Promise<{ status: string, is_emergency: boolean }> {
+  const res = await fetch(`${API_BASE}/api/admin/toggle-district-emergency?district=${district}&status=${status}`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to toggle district emergency");
+  return res.json();
+}

@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import SubmitApplication from "./pages/SubmitApplication";
 import TrackApplication from "./pages/TrackApplication";
 import AdminDashboard from "./pages/AdminDashboard";
+import AuditLogs from "./pages/AuditLogs";
 import NotFound from "./pages/NotFound";
 import DashboardLayout from "./components/portal/DashboardLayout";
 import LandingPage from "./pages/LandingPage";
@@ -37,6 +38,7 @@ const App = () => (
                 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRoute allowedRole="admin"><AdminDashboard /></ProtectedRoute>} />
+                <Route path="/audit-logs" element={<ProtectedRoute allowedRole="admin"><AuditLogs /></ProtectedRoute>} />
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>

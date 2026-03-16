@@ -50,6 +50,7 @@ const SubmitApplication = () => {
     name: "", email: "", phone: "", address: "",
     documentName: "", documentDesc: "",
     category: "", department: "",
+    district: "Mumbai",
   });
 
   const update = (key: string, val: string) =>
@@ -118,6 +119,7 @@ const SubmitApplication = () => {
         department: form.department,
         document_name: form.documentName,
         document_desc: form.documentDesc,
+        district: form.district,
         file: selectedFile,
       });
       setTrackingId(response.tracking_id);
@@ -296,6 +298,27 @@ const SubmitApplication = () => {
                           placeholder="Enter your address"
                           className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus-visible:ring-indigo-gov text-slate-900 dark:text-white mt-1.5"
                         />
+                      </div>
+                      <div>
+                        <Label htmlFor="district" className="text-slate-700 dark:text-slate-300">
+                          Select District
+                        </Label>
+                        <Select
+                          value={form.district}
+                          onValueChange={(v) => update("district", v)}
+                        >
+                          <SelectTrigger 
+                            id="district" 
+                            className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:ring-indigo-gov text-slate-900 dark:text-white mt-1.5"
+                          >
+                            <SelectValue placeholder="Select your district" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">
+                            {["Mumbai", "Thane", "Pune", "Nagpur"].map((d) => (
+                              <SelectItem key={d} value={d}>{d}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
                   )}
@@ -543,6 +566,12 @@ const SubmitApplication = () => {
                               Phone
                             </strong>
                             {form.phone || "—"}
+                          </p>
+                          <p>
+                            <strong className="text-slate-500 dark:text-slate-400 block text-[10px] uppercase tracking-wider mb-0.5">
+                              District
+                            </strong>
+                            {form.district || "—"}
                           </p>
                         </div>
                         <div className="grid grid-cols-2 gap-y-3">

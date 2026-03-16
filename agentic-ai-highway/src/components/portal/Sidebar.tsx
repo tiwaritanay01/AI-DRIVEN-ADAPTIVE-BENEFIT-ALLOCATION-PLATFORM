@@ -8,7 +8,7 @@ export type UserRole = "admin" | "citizen" | null;
 export const adminItems = [
   { label: "ADMIN DASHBOARD", path: "/admin", icon: LayoutDashboard },
   { label: "SERVICES MANAGEMENT", path: "/services", icon: FileText },
-  { label: "AUDIT LOGS", path: "/admin", icon: ShieldCheck },
+  { label: "AUDIT LOGS", path: "/audit-logs", icon: ShieldCheck },
   { label: "SYSTEM ANALYTICS", path: "/admin", icon: History },
 ];
 
