@@ -25,11 +25,18 @@ Our platform leverages an **Agentic AI Pipeline** to automate document verificat
    ```powershell
    $env:GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
    $env:GROQ_API_KEY="YOUR_GROQ_API_KEY"
+
+   $env:GEMINI_API_KEY="AIzaSyDXKjWJungZLDazGCqF5S2x3ZP3hxQFYDk";
+    $env:GROQ_API_KEY="gsk_uE3IscIn8uX94m0pL4KJWGdyb3FYdJ7K3HkQ8XzD6b4W2pL5
    ```
 3. Run the FastAPI server:
    ```bash
    py main.py
    ```
+   or 
+   $env:GEMINI_API_KEY="AIzaSyDXKjWJungZLDazGCqF5S2x3ZP3hxQFYDk";
+   $env:GROQ_API_KEY="gsk_uE3IscIn8uX94m0pL4KJWGdyb3FYdJ7K3HkQ8XzD6b4W2pL5;
+   py main.py
    *The backend will be live at `http://localhost:8001`.*
 
 ### Step 2: Start the Frontend
