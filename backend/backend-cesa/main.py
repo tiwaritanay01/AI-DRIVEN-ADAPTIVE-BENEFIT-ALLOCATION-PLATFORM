@@ -230,10 +230,12 @@ def tier2_llm_check(ocr_text: str, user_name: str, expected_doc_type: str):
     except Exception as e:
         print(f"LLM Error: {e}")
         # Default safety fallback if API fails
+        name_verified = user_name.lower() in ocr_text.lower() if user_name else False
         if name_verified:
             return "Verified", f"Local Fallback: name '{user_name}' exists in document.", 2, None, None, "Unknown"
         else:
             return "Flagged", "Local Fallback: could not find matching name.", 4, None, None, "Unknown"
+
     
 # CORE PS REQUIREMENT: VULNERABILITY & FRAUD ENGINE
 def calculate_vulnerability_and_fraud(ocr_text: str, name: str, db: Session, income=None, land=None, health=None):

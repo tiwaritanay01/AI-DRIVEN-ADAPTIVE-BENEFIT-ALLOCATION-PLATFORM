@@ -23,7 +23,9 @@ export default {
     },
     extend: {
       colors: {
+        "indigo-gov": "#1e40af", // Indigo-800
         border: "hsl(var(--border))",
+
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
