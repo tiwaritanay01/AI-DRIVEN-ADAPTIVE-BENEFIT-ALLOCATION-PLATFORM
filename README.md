@@ -34,8 +34,8 @@ Our platform leverages an **Agentic AI Pipeline** to automate document verificat
    py main.py
    ```
    or 
-   $env:GEMINI_API_KEY="AIzaSyDXKjWJungZLDazGCqF5S2x3ZP3hxQFYDk";
-   $env:GROQ_API_KEY="gsk_uE3IscIn8uX94m0pL4KJWGdyb3FYdJ7K3HkQ8XzD6b4W2pL5;
+   $env:GEMINI_API_KEY="**";
+   $env:GROQ_API_KEY="**";
    py main.py
    *The backend will be live at `http://localhost:8001`.*
 
